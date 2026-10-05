@@ -94,6 +94,16 @@ export async function runReuseGate(input: {
   listCandidatePaths?: (nowQueryKey?: string) => Array<{
     pathKey: string
     queryKey: string
+    inferKey?: string
+    inferKeys?: string[]
+    prospectKey?: string
+    prospectKeys?: string[]
+    matchMode?: string
+    settleActionId?: string
+    settleSeq?: number
+    createdAt?: number
+    bookKeysSequence?: string[]
+    steps?: Array<{ bookKeys: string[] }>
   }>
 }): Promise<{
   adopted: boolean
@@ -172,7 +182,8 @@ export async function runReuseGate(input: {
     }
   }
 
-  const paths = listCandidatePathsViaNeighbours(turnQk)
+  // 类型转换：因为 input.listCandidatePaths 可能只有简单字段，但实际需要完整 PathRecord
+  const rawPaths = listCandidatePathsViaNeighbours(turnQk)
     .filter((p) => !banned.has(p.pathKey))
     .filter((p) => {
       const allow = input.onlyHistoricQueryKeys
@@ -180,6 +191,7 @@ export async function runReuseGate(input: {
       const want = new Set(allow.map((k) => k.trim()).filter(Boolean))
       return want.has(p.queryKey)
     })
+  const paths = rawPaths as import('./attentionIoStore').PathRecord[]
   const st = useAttentionIo.getState()
   const rankByHistoric = new Map(
     neighbourOrder.map((n) => [n.historicQueryKey, n.rank]),

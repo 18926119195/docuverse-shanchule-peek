@@ -33,3 +33,5 @@ dist-ssr
 
 # Local dumps
 toc-sections-dump.txt
+
+.vercel
