@@ -1,0 +1,51 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 5 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 404 >>
+stream
+BT /F1 11 Tf 50 750 Td (Intuition Probe  Page 1) Tj ET
+BT /F1 11 Tf 50 728 Td (User intuition: unconscious cues guide first judgments.) Tj ET
+BT /F1 11 Tf 50 706 Td (Claim A: A flash of insight often precedes formal proof.) Tj ET
+BT /F1 11 Tf 50 684 Td (Claim B: Retrieving near passages can expand that flash.) Tj ET
+BT /F1 11 Tf 50 662 Td (Task: verify whether the flash matches the cited text.) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Length 388 >>
+stream
+BT /F1 11 Tf 50 750 Td (Intuition Probe  Page 2) Tj ET
+BT /F1 11 Tf 50 728 Td (Extension: contrast nearby sentences across pages.) Tj ET
+BT /F1 11 Tf 50 706 Td (Possible inference: insight is a compressed path mark.) Tj ET
+BT /F1 11 Tf 50 684 Td (Reuse: same slots + near question should not re-roll.) Tj ET
+BT /F1 11 Tf 50 662 Td (Deferred: other combos wait as not-yet-expanded.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000373 00000 n 
+0000000828 00000 n 
+0000001267 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1337
+%%EOF

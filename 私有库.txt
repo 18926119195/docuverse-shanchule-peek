@@ -1,0 +1,12 @@
+﻿私有库（删除了 peek 的）
+https://github.com/18926119195/docuverse-shanchule-peek
+
+说明：GitHub 库名不能用纯中文「删除了peek的」，故用拼音等价名 docuverse-shanchule-peek（私有）。
+
+本地路径：
+C:\Users\Administrator\Desktop\docuverse-no-peek-lab
+
+以后直接打开桌面上的「docuverse-no-peek-lab」文件夹即可。
+
+旧 peek 基线私有库（勿混）：
+https://github.com/18926119195/docuverse-kanzheli
