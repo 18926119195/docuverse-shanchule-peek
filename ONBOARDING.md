@@ -1,47 +1,39 @@
 # 入库指南 · 无 peek 自动流与证据回溯
 
-核验基线为 [experiment/no-peek-prospect-as-index · e4c42b8](https://github.com/18926119195/docuverse-shanchule-peek/commit/e4c42b846f843764fab0f6010efa2d10c000a17f)，2026-11-19。
+[一分钟定位](#一分钟定位) · [沿聊天时间线看灵感](#沿聊天时间线看灵感) · [从代码反查来由](#从代码反查来由) · [走读与维护记录](#走读与维护记录)
 
-## 从哪里接手
+## 一分钟定位
 
-本库研究自动流用 `bookKey` 直入 decide、以本问的 prospect 定位 infer 材料后，结论路径是否仍可逐项回查。手动 peek 工具仍可调用。和带 peek 的 [kanzheli 对照仓](https://github.com/18926119195/docuverse-kanzheli) 比较时，首要任务是把自动分支、入模门牌和预算记录成可复跑证据。
+Docuverse 这条实验分支让提问自动流直接用 `bookKey`（可定位的原文块）进入 decide，省去生成 brief 的 peek 步骤。decide 为本问选出 prospect（候选前提或解答方向），infer 用关联原文写出推断，最后形成 path。读本库时先分清「自动流省去 peek」和「手动工具仍可调用」。应用在仓库根。基线为 [默认实验分支 · e4c42b8](https://github.com/18926119195/docuverse-shanchule-peek/commit/e4c42b846f843764fab0f6010efa2d10c000a17f)。[实验说明](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/EXPERIMENT_NO_PEEK.md)
 
-| 要确认的环节 | 入口 |
+## 沿聊天时间线看灵感
+
+**如何读状态。** 已实现表示在所列版本找到与灵感相符的代码路径。部分实现表示已有其中一段。未实现表示已查的入口尚无对应实现。证据不足时标待确认。归档与设计文稿按资料本身的状态描述。
+
+原始 Cursor 对话在 [docs/chat-archive/](https://github.com/18926119195/docuverse-shanchule-peek/tree/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive)。不少设计一同进入 9 月 14 日的 [b85b839 快照](https://github.com/18926119195/docuverse-shanchule-peek/commit/b85b8399f8a23fc57b66a02d5c4ab3023ffba364)。表中的日期取发言或归档，准确写码时间仍有缺口。更细的历史链见 [NP-01–NP-07](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/DEVELOPMENT_HISTORY.txt)。
+
+| 编号与时间（2026 年，北京） | 原始线索与想法 | 基线状态 | 实现证据 |
+| --- | --- | --- | --- |
+| <a name="idea-i01"></a>I01 · 09-10 15:46 | 用户希望头尾先读，提出从百分比变成固定头尾各 20 页。 [OCR 对话](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-10-bookkey-ocr-ingest-pipeline-9175a123.jsonl#L118) | **部分实现**。有头尾优先、缺页重试，再开始中间页。此分支用各 8 页。 | [分段](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/data/pdfPagePipeline.ts#L25-L82) · [头尾就绪条件](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/data/pdfPagePipeline.ts#L236-L300) |
+| <a name="idea-i02"></a>I02 · 09-11 | 无 peek 试验用原文块而非 brief 作为 decide 输入。用户在已有实验上追问能否将整个命中节送 decide。 [用户追问](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-11-project-overview.ini#L7289-L7291) · [试验说明](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/EXPERIMENT_NO_PEEK.md) | **部分实现**。冷启直接组装 bookKey 进入 decide，可分批读候选。达到条件会提前结束批处理。 | [冷启](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts#L554-L594) · [早停](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts#L1221-L1235) |
+| <a name="idea-i03"></a>I03 · 09-11 | 用户认为扩范围要等 decide 用完手头材料，并由 infer 判定不够。 [用户原话](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-11-project-overview.ini#L11395-L11406) | **部分实现**。不足后的扩窗接在 infer 后。本问的 prospect 用来定位原文，decide 可按累计 10 个唯一父门提前停批。 | [提前停批](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts#L1221-L1235) · [本问血缘](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts#L1510-L1543) · [不足扩窗](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts#L1594-L1634) |
+| <a name="idea-i04"></a>I04 · 09-11 至 09-12 | 用户希望门牌少占 token，同时能回溯实际送入主推理的材料。 [简化门牌](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-11-project-overview.ini#L11710-L11716) · [回溯提问](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-12-material-search-optimization-11b9f5ca.jsonl#L56) | **已实现**。窗口内短槽号有映射表，能还原持久化长键。 | [生成与解析](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/arch/windowAlias.ts#L22-L72) |
+| <a name="idea-i05"></a>I05 · 09-13 12:53 | 用户要说明若干 infer 如何按步骤组成一个结论。 [用户原话](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-13-ui-interaction-and-search-strategy-d1aa470d.jsonl#L207) | **已实现**。解析 conclusion 与 steps，并按材料门牌将 infer 绑定到候选 path，兼容旧格式。 | [绑定函数](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/pathLineageBind.ts#L154-L218) · [路径样本](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/scripts/smoke-infer-solution.ts) |
+| <a name="idea-i06"></a>I06 · 09-14 08:20 | 从上传语料导出完整的全局一份 A1 表。 [用户原话](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L6) | **已实现**。导入页按选定格式输出单份 Markdown 或 JSONL，离线样本的长文本不截断。 | [导出按钮](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/ui/PdfUploadPanel.tsx#L453-L486) · [全局导出](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/a1DsExport.ts#L272-L337) |
+| <a name="idea-i07"></a>I07 · 09-14 09:08 | 用户从 Engram 的讨论追问能否捕捉模型激活并用作过程先验。 [过程先验对话](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-14-deepseek-engram-process-prior-4852a46c.jsonl#L32) | **未落地**。本应用保存的是 API 输入输出与外部 path 台账，正常链路没有模型内部激活采集。 | [模型协议入口](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/api/llm/chat/completions.ts) · [应用侧路径](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/pathLineageBind.ts) |
+| <a name="idea-i08"></a>I08 · 09-14 10:17 | 用户选择让模型从批内原文「默写」补充名词，再用本批原文回配。 [裁定与回复](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L69-L72) | **部分实现**。默写、词面检查和汇总有独立模块，问答入口中未找到接入。 | [批内回配](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/arch/bookNounS1Dictation.ts#L173-L226) · [模块入口](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/arch/bookNounS1Dictation.ts#L408-L506) |
+| <a name="idea-i09"></a>I09 · 09-14 12:57 | 建表保留词面，定位到书门留待提问时执行。 [用户与助手确认](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L216-L217) | **部分实现**。表构建止于合并词面 `S`。协议记载问时定位，正常问答链尚无从词表到命中的调用证据。 | [构建返回值](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/arch/bookNounS1Dictation.ts#L483-L506) · [定位协议](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/docs/book-noun-pipeline-protocol-2026-09-14.md) · [问答入口](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/intentDeskRouter.ts#L785-L814) |
+
+## 从代码反查来由
+
+| 第一次读到的代码 | 它来自哪段想法 |
 | --- | --- |
-| 用户问题如何触发自动流 | [intentDeskRouter.ts](src/reasoning/intentDeskRouter.ts) → [autoFlow.ts](src/reasoning/autoFlow.ts) → [harnessGateway.ts](src/reasoning/harnessGateway.ts) |
-| 槽号和结论怎样回到材料 | [windowAlias.ts](src/arch/windowAlias.ts) · [pathLineageBind.ts](src/reasoning/pathLineageBind.ts) |
-| 导入、分批与 A1 导出 | [PdfUploadPanel.tsx](src/ui/PdfUploadPanel.tsx) · [pdfPagePipeline.ts](src/data/pdfPagePipeline.ts) · [全局导出](src/reasoning/a1DsExport.ts) |
-| 名词表与历史 | [S₁ 默写模块](src/arch/bookNounS1Dictation.ts) · [原始对话目录](docs/chat-archive/) · [NP-01–NP-07](DEVELOPMENT_HISTORY.txt) |
+| [autoFlow.ts](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts) 里的 `sealedBriefKeys` | [I02](#idea-i02) 中沿用的字段名，在本分支承载原文父门。[I03](#idea-i03) 解释此列表如何进入 infer，以及何时再次扩窗。 |
+| [windowAlias.ts](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/arch/windowAlias.ts) 的短槽号，及 [pathLineageBind.ts](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/pathLineageBind.ts) 的 path 绑定 | [I04](#idea-i04) 管窗口号还原，[I05](#idea-i05) 管推断步骤和来源如何组成结论。 |
+| [PdfUploadPanel.tsx](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/ui/PdfUploadPanel.tsx) 的 A1 单份导出，与并列的 [名词模块](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/arch/bookNounS1Dictation.ts) | [I06](#idea-i06) 已进界面，[I08](#idea-i08)、[I09](#idea-i09) 仍处在模块和协议之间。 |
 
-```sh
-npm ci --ignore-scripts
-npm run build
-npm run check:system
-npm run dev
-```
+## 走读与维护记录
 
-Node 24.22.1 下构建与 [离线检查](scripts/check-system.mjs) 通过。观测到 50 页夹具拆分 8／8／34、两条 A1 样本含完整 2,750 字长文本，词表硬闸拒收非本批和噪声候选，窗内别名、词面排序与增量三态通过。供应商容量、早停、真实 OCR 与部署需独立联调。
+打开 [自动流入口](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/intentDeskRouter.ts#L785-L814)，顺着 [冷启](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts#L554-L594) 跟到 [infer 选材](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/autoFlow.ts#L1510-L1543)，找到首批进入 decide 的 key、prospect 绑定的本问，以及找不到原文时的返回。读完应能解释自动流省去的是哪一步、手动 peek 在哪里、prospect 与实际送模材料如何关联。可对照 [手动 peek 入口](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/src/reasoning/harnessGateway.ts#L242-L253)。本轮在 Node 24 复跑构建及 [离线检查](https://github.com/18926119195/docuverse-shanchule-peek/blob/e4c42b846f843764fab0f6010efa2d10c000a17f/scripts/check-system.mjs)，未运行真实供应商端到端链路。若发现新对话或代码反例，以 I 编号加上发言链接、提交和观察记录，修订对应状态。
 
-## 从原话到代码
-
-早期设计归档集中进入 [2026-09-14 快照 b85b839](https://github.com/18926119195/docuverse-shanchule-peek/commit/b85b8399f8a23fc57b66a02d5c4ab3023ffba364)。下表日期来自对话，详细引文和源码版本见 [开发时间线](DEVELOPMENT_HISTORY.txt)。
-
-| 时间（北京时间） | 意图与状态 | 证据 |
-| --- | --- | --- |
-| 09-10 | 用户要求先处理固定头尾页。此分支采用头尾各 8 页，会等头尾齐备后开放目录及中段处理。 | [OCR 对话](docs/chat-archive/2026-09-10-bookkey-ocr-ingest-pipeline-9175a123.jsonl#L118) · [调度源码](src/data/pdfPagePipeline.ts) |
-| 09-11 | 冷启自动流先 decide 再按 prospect 血缘送 infer，需要时扩材料。仍需通过贯穿入口的桩测试记录早停、无效门牌和重试。 | [无 peek 对话](docs/chat-archive/2026-09-11-no-peek-decide-infer-735a6aee.jsonl) · [自动流](src/reasoning/autoFlow.ts) |
-| 09-12 至 09-13 | 回溯真正送进主推理的槽，按 steps 绑定候选路径。窗内别名和新旧结论格式具备模块验证。 | [回溯对话](docs/chat-archive/2026-09-12-material-search-optimization-11b9f5ca.jsonl#L56) · [路径对话](docs/chat-archive/2026-09-13-ui-interaction-and-search-strategy-d1aa470d.jsonl#L207) · [路径夹具](scripts/smoke-infer-solution.ts) |
-| 09-14 | 用户要求全局合并导出 A1，现已进导入界面。S₁ 默写、回配、硬闸是模块原型。尚无从正常问答入口到该模块的调用证据。 | [A1 与默写对话](docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L6) · [A1 导出](src/reasoning/a1DsExport.ts) · [S₁ 原型](src/arch/bookNounS1Dictation.ts) |
-
-## 下一项工作 · 复跑同题的两条自动流
-
-用钱学森《工程控制论》的反馈思想，将材料边界当作受控状态，将证据覆盖、调用预算和无法回溯的 key 当作观测量。
-
-1. 取同一份最小语料、问句和返回桩。给两臂固定同一 OCR 页集合和模型设置，基线保留一题材料充足和一题需扩窗的输入。逐轮记录入口、路由、prospect、实际送模键、返回键、三态、结论 path、耗时及调用次数。
-2. 首先只验本库。冷启自动路径首个相关步骤是 decide，infer 用本问 prospect；应接受合法窗内别名并拒收不可回查的证据。覆盖一次材料充足直接结束与一次不足扩窗，记录停止原因。调用次数或扩窗次数越过源码上限时暂停并复查路由。
-3. 以相同控制变量跑 kanzheli，对比时序中的工具调用和送模键差分。两边任何路径无法对齐到输入材料时回退至上一基线，并保存最小失败日志。由维护者确认词表模块要充当哪一环输入后，再单独修改 S₁ 接入，防止同一次实验更换两个变量。
-4. PR 附 NP-02／NP-03、两臂提交与输入哈希、预算、反例与复验结果。把已验行为回写到相应 NP 条目。Engram 和内部过程先验仍以研究假设登记。
-
-## 方法依据
-
-本指南把总体设计落实为边界、目标和任务接口，把工程控制中的反馈落实为观测、判据和纠偏。维护者用原始协作记录、代码和固定样本共同核验定性判断与量化结果，据此决定下一轮行动。[《工程控制论》](https://openlibrary.org/books/OL49218199M/Engineering_cybernetics) · [《组织管理的技术——系统工程》](https://doi.org/10.13255/j.cnki.jusst.2011.06.020) · [《一个科学新领域——开放的复杂巨系统及其方法论》](https://cnki.istiz.org.cn/kcms/detail/detail.aspx?dbcode=CPFD&dbname=cpfd1999&filename=ZGXC199008001001)
+**指南如何更新。** 以仓库和版本划定范围，从聊天提取原始目标，再用代码与产物校正对当时决策的理解。新证据出现时，回到原编号修订记录。这种读法借鉴了钱学森的系统工程和工程控制论。 [《组织管理的技术——系统工程》](https://doi.org/10.13255/j.cnki.jusst.2011.06.020) · [《工程控制论》](https://openlibrary.org/books/OL49218199M/Engineering_cybernetics)
