@@ -7,7 +7,7 @@
 包含：
 1. 完整源码（与当前工作区一致，已含监督两轨 / revise_q / 同构闸等今日改动）
 2. docs/chat-archive/ —— 架构权威聊天归档（含今日）
-3. 聊天记录-今日原文/ —— Cursor 会话原始 jsonl（方便对照）
+3. docs/chat-archive/ —— Cursor 会话原件，旧路径见 docs/archive/PATHS.txt
 
 不要打开：
 - Desktop\docuverse-main（可能缺 .git / 易混）

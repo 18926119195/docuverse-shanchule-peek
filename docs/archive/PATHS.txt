@@ -1,0 +1,82 @@
+文件路径索引
+
+整理前路径与 Git 对象可从 https://github.com/18926119195/docuverse-shanchule-peek/tree/4d40631414bb2181d27205d955866a9e75bfbb88 回查。
+图标入口使用现有 public/favicon.svg，应用根目录和部署根目录保持原布局。
+
+原样移动
+
+src/assets/hero.png
+  docs/archive/ui-assets/hero.png
+  Git blob 02251f4b956c55af2d76fd0788124d7eee2b45eb
+src/assets/vite.svg
+  docs/archive/ui-assets/vite.svg
+  Git blob 5101b674df391399da71c767aa5c976426c9dc7a
+src/arch/# Yesterday's project tasks.ini
+  docs/chat-archive/yesterdays-project-tasks.ini
+  Git blob b74763132debeeafb455aaa06b0dcee59124d5d0
+
+同一对象的旧路径映射
+
+聊天记录-今日原文/2026-09-07-kanzheli-question-llm-and-ui-3df19011.jsonl
+  docs/chat-archive/2026-09-07-kanzheli-question-llm-and-ui.jsonl
+  Git blob bd57d883cef25048e756d40cc4b4d765d8b6f047
+聊天记录-今日原文/2026-09-07-settle-key-and-viewfocus-ui-a1ff5408.jsonl
+  docs/chat-archive/2026-09-07-settle-key-and-viewfocus-ui.jsonl
+  Git blob f73f86ec3a12e2f6dccf05347d8c2d7486c64dee
+聊天记录-今日原文/2026-09-07-supervise-dual-track-d7b8be15.jsonl
+  docs/chat-archive/2026-09-07-supervise-dual-track.jsonl
+  Git blob 4b6a4f432acf5cfefec914dcf7e18c6124d91ca9
+聊天记录-今日原文/2026-09-08-bookkey-emphasize-region-combo-55137847.jsonl
+  docs/chat-archive/2026-09-08-bookkey-emphasize-region-combo.jsonl
+  Git blob 838aab1a07f7800f7b0c098faca21cdd34a32fb3
+聊天记录-今日原文/2026-09-08-intent-llm-sphere-construction-15f60db8.jsonl
+  docs/chat-archive/2026-09-08-intent-llm-sphere-construction.jsonl
+  Git blob 525b6bac05bea9cd1b80118bfc2805279f466658
+聊天记录-今日原文/2026-09-08-turn-progress-peek-parallel-6885d7e8.jsonl
+  docs/chat-archive/2026-09-08-turn-progress-peek-parallel.jsonl
+  Git blob 328a07754d275c94fd2dafbfc5aa87e795dc839e
+聊天记录-今日原文/2026-09-09-path-lineage-supervise-norm-26025a7c.jsonl
+  docs/chat-archive/2026-09-09-path-lineage-supervise-norm.jsonl
+  Git blob 71fee7e36119a534ee25cbc7cdd50453c559d212
+聊天记录-今日原文/2026-09-10-bookkey-ocr-ingest-pipeline-9175a123.jsonl
+  docs/chat-archive/2026-09-10-bookkey-ocr-ingest-pipeline-9175a123.jsonl
+  Git blob 6aaae08b919644f0ec0fcea5ee9c2bf4a74f54a4
+聊天记录-今日原文/2026-09-10-deepseek-kv-vs-docuverse-architecture-ea8633ff.jsonl
+  docs/chat-archive/2026-09-10-deepseek-kv-vs-docuverse-architecture-ea8633ff.jsonl
+  Git blob 64a24c10274fa39ca7ef6414ef3c90921e1283d9
+聊天记录-今日原文/2026-09-10-github-sync-prep-120c9369.jsonl
+  docs/chat-archive/2026-09-10-github-sync-prep-120c9369.jsonl
+  Git blob a68beef05987104ac8eb98a1b4a57cb477b2938e
+聊天记录-今日原文/2026-09-10-settlement-ui-toc-map-399aab3e.jsonl
+  docs/chat-archive/2026-09-10-settlement-ui-toc-map-399aab3e.jsonl
+  Git blob 5abe097deecaa5b2a1a1c786cab3c3e77bc7d4ca
+聊天记录-今日原文/2026-09-11-no-peek-decide-infer-735a6aee.jsonl
+  docs/chat-archive/2026-09-11-no-peek-decide-infer-735a6aee.jsonl
+  Git blob bbe3f140d1a77c824d05724fea6e2fb40828ca8a
+聊天记录-今日原文/2026-09-11-project-overview.ini
+  docs/chat-archive/2026-09-11-project-overview.ini
+  Git blob 6c220eda31987d271df7f8c565f32f663304af49
+聊天记录-今日原文/2026-09-12-material-search-optimization-11b9f5ca.ini
+  docs/chat-archive/2026-09-12-material-search-optimization-11b9f5ca.ini
+  Git blob 9446807b5e907b980eb94983b51e687246992c0c
+聊天记录-今日原文/2026-09-12-material-search-optimization-11b9f5ca.jsonl
+  docs/chat-archive/2026-09-12-material-search-optimization-11b9f5ca.jsonl
+  Git blob 611fcbaaa0230cec0baf8080cd31c2cc07a59361
+聊天记录-今日原文/2026-09-12-material-search-optimization-from-聊天记录1.ini
+  docs/chat-archive/2026-09-12-material-search-optimization-11b9f5ca.ini
+  Git blob 9446807b5e907b980eb94983b51e687246992c0c
+聊天记录-今日原文/2026-09-13-ui-interaction-and-search-strategy-d1aa470d.jsonl
+  docs/chat-archive/2026-09-13-ui-interaction-and-search-strategy-d1aa470d.jsonl
+  Git blob bb48ac349e26fbbe14daf08bced9ddd34a308b20
+聊天记录-今日原文/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl
+  docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl
+  Git blob b500f25d21c1cf10ebb224e0a18e6b1ab33eba08
+聊天记录-今日原文/2026-09-14-deepseek-engram-process-prior-4852a46c.jsonl
+  docs/chat-archive/2026-09-14-deepseek-engram-process-prior-4852a46c.jsonl
+  Git blob a623fe604e91e44226ce99705f40841c7053e2dc
+聊天记录-今日原文/2026-09-14-push-private-repo-latest-task-71abf617.jsonl
+  docs/chat-archive/2026-09-14-push-private-repo-latest-task-71abf617.jsonl
+  Git blob 414af1fe357a6016635e9152a992abc6a29d2fa8
+聊天记录-今日原文/bd26343f-5239-4454-9140-06e88a92011b.jsonl
+  docs/chat-archive/2026-09-07-letter-desk-supervise.jsonl
+  Git blob fccd9ded7567759d113998212c119c08d7a11dac
