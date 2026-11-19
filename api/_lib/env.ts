@@ -6,13 +6,11 @@
 declare const process: { env: Record<string, string | undefined> }
 
 const LOCKED_CHAT = {
-  llmApiKey: 'sk-4c7c652154734aed8b37fe20816b7efd',
   llmBaseUrl: 'https://api.deepseek.com',
   chatModel: 'deepseek-v4-flash',
 } as const
 
 const LOCKED_OCR = {
-  zhipuApiKey: 'ee855f9fa6344a728c5fdcd9b0c4d79d.Gu5bzsn8XtTgLzmM',
   ocrModel: 'glm-ocr',
 } as const
 
@@ -22,7 +20,7 @@ export function serverEnv(name: string): string {
 }
 
 export function zhipuApiKey(): string {
-  return serverEnv('ZHIPU_API_KEY') || LOCKED_OCR.zhipuApiKey
+  return serverEnv('ZHIPU_API_KEY')
 }
 
 export function zhipuOcrModel(): string {
@@ -36,7 +34,7 @@ export function llmUpstream(): {
 } {
   return {
     baseUrl: LOCKED_CHAT.llmBaseUrl,
-    apiKey: LOCKED_CHAT.llmApiKey,
+    apiKey: serverEnv('LLM_API_KEY'),
     chatModel: LOCKED_CHAT.chatModel,
   }
 }

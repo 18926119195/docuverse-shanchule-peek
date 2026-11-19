@@ -1,0 +1,86 @@
+docuverse-shanchule-peek｜开发时间线与代码入口
+
+先选任务
+NP-01  PDF 头尾调度与目录前置
+NP-02  无 peek 自动流、批次和 infer 血缘
+NP-03  推理窗内别名与材料排序
+NP-04  conclusion、steps 与候选 path
+NP-05  A1 全局语料导出
+NP-06  S₀/S₁ 名词表原型
+NP-07  构建、三态和服务端模型配置
+
+从哪里开始
+在仓库根目录安装锁定依赖并运行 npm run dev。生产验证用 npm run build。PDF 导入和 A1 导出从 src/ui/PdfUploadPanel.tsx 进入。提问从 src/reasoning/intentDeskRouter.ts 进入 runAutoFlow；按源路径看脚本及调用边界。
+https://github.com/18926119195/docuverse-shanchule-peek/blob/f74bf98c762dbc2af8ee06066333a58b93a6c9ac/package.json
+https://github.com/18926119195/docuverse-shanchule-peek/blob/f74bf98c762dbc2af8ee06066333a58b93a6c9ac/docs/archive/PATHS.txt
+
+时间采用聊天内可见的北京时间。默认实验分支的公开快照 b85b839 是 2026-09-14 的根提交，涵盖此前临时试验。历史代码链接显示该版本的实现，无法用提交历史确定每项最初写入的时刻。
+
+NP-01｜2026-09-10 15:46｜头尾页数和前置队列
+用户原句片段「不要按照头尾15%，而是按照头尾各20页。」
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-10-bookkey-ocr-ingest-pipeline-9175a123.jsonl#L118
+版本差异　kanzheli 固定为头尾各 20 页，本实验快照实际是各 8 页。已有滑动并发与缺页重试；头尾齐备才开放目录向导和中间处理。
+代码 https://github.com/18926119195/docuverse-kanzheli/blob/040a9bb1a82cbdd408893510e937afcf157df931/src/data/pdfPagePipeline.ts#L25-L36
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/data/pdfPagePipeline.ts#L25-L82
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/data/pdfPagePipeline.ts#L236-L300
+验证　50 页调度结果为 8 + 8 + 34，无重复。外部 OCR 识别效果未复跑。
+
+NP-02｜2026-09-11｜bookKey 直入 decide
+原件中助手复述「认同：先扫完 decide → infer，不够再 seedRange。」这是助手记录，发言角色保留。
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-11-project-overview.ini#L11406
+已接入　自动流冷启把 bookKey 递送给 decide。每批最多 6、并发最多 3，达到 10 条唯一父门时可提前停批。infer 按本问 prospect 还原证据书门。infer 判不够时才扩素材，外循环最多 2 次。手动 peek 入口仍存在。
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/intentDeskRouter.ts#L793-L799
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/autoFlow.ts#L554-L594
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/autoFlow.ts#L1158-L1235
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/autoFlow.ts#L1510-L1543
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/autoFlow.ts#L1616-L1689
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/harnessGateway.ts#L242-L253
+验证　调用链和阈值由源码核对。真实供应商的回包、早停及边界行为尚未端到端验证。
+
+NP-03｜2026-09-12 13:49、15:29｜回溯发给推理的材料
+用户原句片段「说白了我感觉其实是可以做得到回溯到送进去主推理的到底是哪些」
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-12-material-search-optimization-11b9f5ca.jsonl#L56
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-12-material-search-optimization-11b9f5ca.jsonl#L79
+已实现　模型窗内槽号与台账长键由别名表对照；自动流用问核词面对材料排优先级。
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/arch/windowAlias.ts#L24-L72
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/autoFlow.ts#L1075-L1094
+验证　离线函数接受 ⟦1⟧，拒绝旧 w1；短而密的样本排序先于长而稀的样本。检索质量与模型稳定性需要实测。
+
+NP-04｜2026-09-13 12:53｜从步骤拼装结论
+用户原句片段「最终写出这些infer是如何排列组合形成解决用户问题的conclution的」
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-13-ui-interaction-and-search-strategy-d1aa470d.jsonl#L207
+已实现　结论和 steps 经解析、书门校验及血缘绑定成为候选 path；旧格式仍兼容。
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/pathLineageBind.ts#L154-L218
+验证　仓库内 smoke-infer-solution 用两条新格式解法落两个候选 path，共三个 inferKeys，并覆盖旧格式解析。
+可复跑 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/scripts/smoke-infer-solution.ts
+
+NP-05｜2026-09-14 08:20｜A1 全局导出
+用户原句片段「帮我把a1表的提取，直接导出对的是一个全局的一份，而不要分开几份。」
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L6
+已实现　上传界面提供 Markdown 和 JSONL 各一份的全局导出，处理符合条件的 A1 可检索文本。另有命令行提取入口。
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/ui/PdfUploadPanel.tsx#L453-L486
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/a1DsExport.ts#L272-L337
+验证　离线两行样本按书序导出，2,750 字样本未截断。
+
+NP-06｜2026-09-14 10:17 至 13:04｜S₁ 默写与回配
+用户原句「算了还是按照默写吧。」
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L71
+原件 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L216
+模块已实现　S₀ 掩码、按间隙拆批、默写结果回配、同批子串硬闸和去重。未发现问答入口或外部脚本调用 runBookNounS1Dictation。
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/arch/bookNounS1Dictation.ts#L173-L226
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/arch/bookNounS1Dictation.ts#L408-L506
+验证　离线硬闸保留原文 Lacan，拒绝非本批 Freud 和带掩码候选。将名词表接入问后定位仍是后续工作。
+
+NP-07｜2026-11-19｜可构建、三态与服务端配置
+已提交到 #1　规范 PathRecord 回调类型；「不充分／不够用／not enough」优先归为 insufficient；运行时从服务端环境变量读取 DeepSeek 和智谱凭据。
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/f74bf98c762dbc2af8ee06066333a58b93a6c9ac/src/reasoning/reuseGate.ts
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/f74bf98c762dbc2af8ee06066333a58b93a6c9ac/src/arch/keyIncrementStatus.ts
+代码 https://github.com/18926119195/docuverse-shanchule-peek/blob/f74bf98c762dbc2af8ee06066333a58b93a6c9ac/api/_lib/env.ts
+验证　此前隔离构建通过、API 类型检查通过。无密钥的本地协议 infer 走 Mock，chat 返回 503，embeddings 返回 410。真实外部服务仍待联调。
+https://github.com/18926119195/docuverse-shanchule-peek/pull/1
+
+研究边界
+进程先验、内部激活和 Engram 的联系在聊天出现，应用实际持有的是外部 API 输入输出和台账。模型内部路径没有落地证据。
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-14-deepseek-engram-process-prior-4852a46c.jsonl#L32
+比较有无 peek 时固定语料、OCR 页数、问句和模型。记录输入门、返回门、调用次数和候选状态；kanzheli main 是带 peek 的对照。本仓库 main 的根树与默认实验分支相同，当前 main 也进入 no-peek 自动流。
+https://github.com/18926119195/docuverse-shanchule-peek/commit/1a8dcdfef3ecd88ee05e524b74a3b39fe55e1b98

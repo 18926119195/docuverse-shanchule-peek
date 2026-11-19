@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --port 5175 --strictPort --host 127.0.0.1",
     "build": "tsc -b && vite build",
+    "check:system": "node scripts/check-system.mjs",
     "lint": "oxlint",
     "preview": "vite preview --port 5176 --strictPort"
   },

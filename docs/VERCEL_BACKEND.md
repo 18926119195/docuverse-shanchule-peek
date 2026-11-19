@@ -2,7 +2,7 @@
 
 > 目标：求职 demo 可点效果；**内禀坐标工程（铸键 / 排放 / 闭包规则）与上游 Key 不在浏览器包内**。  
 > 浏览器只拿密封句柄 `h1.…`，**真 lockId 不出站**。  
-> 推理锁定 **DeepSeek-V4-Pro**；OCR 锁定智谱 **glm-ocr**。  
+> 推理默认使用 **deepseek-v4-flash**；OCR 默认使用智谱 **glm-ocr**。
 > **Vercel 生产：** `vite build` 关闭 sourcemap、minify、drop console——Sources 里看不到 `intrinsicKey.ts` 等源文件名；协议规则仍只在 `api/`。  
 > Network 仍可见效果层（摘录、绿框几何、`h1`）；`emit-page` 线上响应已去掉 `slotK`/字符区间字段。  
 > 日期：2026-08-20
@@ -38,7 +38,7 @@
 |------|------|------|
 | `HANDLE_SECRET` | 强烈建议 | 密封句柄密钥；缺省回退 `DEMO_ACCESS_TOKEN` / 开发占位 |
 | `ZHIPU_API_KEY` | OCR | 智谱 |
-| `LLM_API_KEY` | 推理/向量 | 上游 |
+| `LLM_API_KEY` | 真实推理 | DeepSeek 官方 API |
 | `DEMO_ACCESS_TOKEN` | 公开站 | 门禁 |
 | `VITE_DEMO_ACCESS_TOKEN` | 与上一致 | 请求头 |
 

@@ -1,0 +1,28 @@
+docuverse-shanchule-peek｜无 peek 自动流与名词表实验
+开发时间线（原话、实现提交、源码行号和验证）见同目录 DEVELOPMENT_HISTORY.txt。
+https://github.com/18926119195/docuverse-shanchule-peek/blob/experiment/no-peek-prospect-as-index/DEVELOPMENT_HISTORY.txt
+核验 Git 提交 b85b8399f8a23fc57b66a02d5c4ab3023ffba364
+协作总导航 https://github.com/18926119195/docuverse/blob/main/MAINTAINERS.txt
+
+这个库在开发什么
+应用在仓库根。自动路径以 bookKey 直入 decide，按本问 prospect 的血缘送 infer；确有手动 peek 调用口。OCR 头尾各 8 页。A1 单份导出已进入上传 UI；S₁ 默写与本批回配已有函数，当前调用图仅找到定义及再导出，完整问后定位链尚未出现。
+
+首次阅读的代码入口
+src/reasoning/autoFlow.ts → pathLineageBind.ts；A1 入口为 src/ui/PdfUploadPanel.tsx；S₁ 模块在 src/arch/bookNounS1Dictation.ts。
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/autoFlow.ts#L554
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/autoFlow.ts#L1510
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/reasoning/harnessGateway.ts#L242
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/ui/PdfUploadPanel.tsx#L453
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/src/arch/bookNounS1Dictation.ts#L408
+
+相关聊天原件
+用户原文「算了还是按照默写吧。」
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L71
+讨论中另有建表末 locate 是否多余。
+https://github.com/18926119195/docuverse-shanchule-peek/blob/b85b8399f8a23fc57b66a02d5c4ab3023ffba364/docs/chat-archive/2026-09-14-book-noun-pipeline-a1-global-44215623.jsonl#L216
+
+维护边界和下次接续
+保留为实验。比较 peek 有无时统一页数、语料与模型，记录首次输出、调用次数、证据和待确认路径。名词表入口先用离线夹具明确失败批次、重复名词和回配范围，再单独提出接入；模型内部记忆仍是研究问题。
+本文件只依据 Git 提交关系、可定位的聊天原件和源码。候选改动需要以正常入口及复跑证据验收。
+
+文件整理与旧路径映射见 docs/archive/PATHS.txt。

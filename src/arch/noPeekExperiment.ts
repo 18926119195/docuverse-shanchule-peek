@@ -1,6 +1,6 @@
 /**
  * 实验分支开关：删除 peek，prospect 父门 = bookKey（顶替 brief 索引位）。
- * main 无此文件语义；切回 main 即恢复 peek 架构。
+ * 本仓库的默认实验分支和 main 共享这条自动流程。
  */
 
 import { docHasAnyBrief } from '../reasoning/masterTableMap'
@@ -11,7 +11,7 @@ import {
 } from './seedRange'
 import type { BookIndex } from '../reasoning/pipelineA'
 
-/** 本分支恒为 true；勿拷到 main */
+/** 自动流程从 bookKey 直接进入 decide。 */
 export const NO_PEEK_EXPERIMENT = true
 
 export const resolveToBookKey = resolveSeedEndpointToBookKey

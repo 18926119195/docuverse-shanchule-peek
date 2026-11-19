@@ -56,14 +56,14 @@ export function normalizeIncrementStatus(raw: unknown): IncrementReadStatus | nu
     return 'unread'
   }
   if (
+    /insufficient|inadequate|not\s+(?:sufficient|enough|adequate|full)|不充分|不够|不足|缺|partial|weak/.test(s)
+  ) {
+    return 'insufficient'
+  }
+  if (
     /sufficient|充分|够用|足够|到位|enough|ok|adequate|full/.test(s)
   ) {
     return 'sufficient'
-  }
-  if (
-    /insufficient|不充分|不够|不足|缺|partial|weak/.test(s)
-  ) {
-    return 'insufficient'
   }
   return null
 }
