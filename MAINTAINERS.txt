@@ -1,8 +1,8 @@
 docuverse-shanchule-peek｜无 peek 自动流与名词表实验
 开发时间线（原话、实现提交、源码行号和验证）见同目录 DEVELOPMENT_HISTORY.txt。
-https://github.com/18926119195/docuverse-shanchule-peek/blob/codex/repository-cleanup/DEVELOPMENT_HISTORY.txt
+https://github.com/18926119195/docuverse-shanchule-peek/blob/experiment/no-peek-prospect-as-index/DEVELOPMENT_HISTORY.txt
 核验 Git 提交 b85b8399f8a23fc57b66a02d5c4ab3023ffba364
-协作总导航 https://github.com/18926119195/docuverse/blob/codex/repository-cleanup/MAINTAINERS.txt
+协作总导航 https://github.com/18926119195/docuverse/blob/main/MAINTAINERS.txt
 
 这个库在开发什么
 应用在仓库根。自动路径以 bookKey 直入 decide，按本问 prospect 的血缘送 infer；确有手动 peek 调用口。OCR 头尾各 8 页。A1 单份导出已进入上传 UI；S₁ 默写与本批回配已有函数，当前调用图仅找到定义及再导出，完整问后定位链尚未出现。
