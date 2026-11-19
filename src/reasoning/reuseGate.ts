@@ -4,7 +4,7 @@
 
 import { expandHistoricQueryKey } from './deskEntryGate'
 import { parseReuseJudgments } from './inferPath'
-import { useAttentionIo } from './attentionIoStore'
+import { useAttentionIo, type PathRecord } from './attentionIoStore'
 import { briefKeysUsedByPaths } from './pathBriefExclusion'
 import { mapBriefToBook } from './masterTableMap'
 import { keyStatusContractHint } from './keyIncrementStatus'
@@ -91,10 +91,7 @@ export async function runReuseGate(input: {
     | { ok: true; content: string; finishReason: string }
     | { ok: false; note: string }
   >
-  listCandidatePaths?: (nowQueryKey?: string) => Array<{
-    pathKey: string
-    queryKey: string
-  }>
+  listCandidatePaths?: (nowQueryKey?: string) => PathRecord[]
 }): Promise<{
   adopted: boolean
   /** 已挂起提案，等人批（≠ 已 adopt） */
